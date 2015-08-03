@@ -1,0 +1,15 @@
+- hosts: binary
+  roles:
+  - binary
+
+- hosts: master
+  roles:
+  - setup
+  - mapping
+  - master
+
+- hosts: minions
+  roles:
+  - setup
+  - mapping
+  - minions3

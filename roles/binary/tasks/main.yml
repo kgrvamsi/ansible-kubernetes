@@ -1,0 +1,8 @@
+- name: Getting the Stable Version of Kubernetes
+  get_url: url=https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz dest=./ mode=0777
+
+- name: Extract the Tar file
+  unarchive: src=kubernetes.tar.gz dest=./
+
+- name: Extracting the Kubernetes Binaries
+  unarchive: src=./kubernetes/server/kubernetes-server-linux-amd64.tar.gz dest=/tmp/
