@@ -1,8 +1,26 @@
 - name: Getting the Stable Version of Kubernetes
-  get_url: url=https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.0.1/kubernetes.tar.gz dest=/tmp mode=0777
+  get_url: url=https://github.com/GoogleCloudPlatform/kubernetes/releases/download/{{kube_version}}/kubernetes.tar.gz dest=~/ mode=0777
 
 - name: Extract the Tar file
-  unarchive: src=kubernetes.tar.gz dest=/tmp
+  unarchive: src=~/kubernetes.tar.gz dest=/tmp
 
 - name: Extracting the Kubernetes Binaries
   unarchive: src=/tmp/kubernetes/server/kubernetes-server-linux-amd64.tar.gz dest=/tmp/
+
+- name: Copying the Master Binaries  Kubectl
+  copy: src=/tmp/kubernetes/server/bin/kubectl dest=ansible-kubernetes/roles/master/files/ mode=0777
+
+- name: Copying the Master Binaries  kube-scheduler
+  copy: src=/tmp/kubernetes/server/bin/kube-scheduler dest=ansible-kubernetes/roles/master/files/ mode=0777  
+
+- name: Copying the Master Binaries kube-controller-manager
+  copy: src=/tmp/kubernetes/server/bin/kube-controller-manager dest=ansible-kubernetes/roles/master/files/ mode=0777
+
+- name: Copying the Master Binaries kube-apiserver
+  copy: src=/tmp/kubernetes/server/bin/kube-apiserver dest=ansible-kubernetes/roles/master/files/ mode=0777
+
+- name: Copying the Slave Binaries kube-kubelet
+  copy: src=/tmp/kubernetes/server/bin/kubelet  dest=ansible-kubernetes/roles/minions/files/ mode=0777
+
+- name: Copying the Slave Binaries kube-proxy
+  copy: src=/tmp/kubernetes/server/bin/kube-proxy  dest=ansible-kubernetes/roles/minions/files/ mode=0777  

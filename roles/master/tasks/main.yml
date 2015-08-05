@@ -1,0 +1,46 @@
+- name: Installing the Supervisord Service
+  apt: $item state=present
+  with_items:
+   - supervisord
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Copying the Supervisord Configuration Files
+  copy: src=$item  dest=/etc/supervisor/conf.d/  mode=0777
+  with_items:
+   - units/kube-apiserver.conf
+   - units/kube-controller-manager.conf
+   - units/kube-scheduler.conf
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Copying the Binaries to /usr/bin/
+  copy: src=$item dest=/usr/bin/  mode=0777
+  with_items:
+   - kube-apiserver
+   - kublet
+   - kube-scheduler
+   - kube-controller-manager
+  when: ansible_distribution == 'Ubuntu'
+  
+- name: Creating the Folder for Coreos
+  file: path=/opt/bin/ state=directory
+  when: ansible_distribution == 'CoreOS'
+
+ - name: Copying the Binaries to the /opt/bin/ -- Coreos
+   copy: src=$item dest=/usr/bin/  mode=0777
+   with_items:
+    - kube-apiserver
+    - kublet
+    - kube-scheduler
+    - kube-controller-manager
+   when: ansible_distribution == 'CoreOS'
+
+- name: Copying the Systemd files to /etc/systemd/system/
+  copy: src=$item dest=/etc/systemd/system/ mode=0777
+  with_items:
+   - docker.service
+   - etcd.service
+   - flannel.service
+   - kube-apiserver.service
+   - kube-controller-manager.service
+   - kube-scheduler.service
+  when: ansible_distribution == 'CoreOS'
